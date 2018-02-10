@@ -1,0 +1,48 @@
+﻿
+
+.editare{
+    min-height:120px;
+}
+
+.window-edit {
+    min-height: 360px;
+    min-width: 260px;
+    background-color: lightgray;
+    text-align: center;
+}
+
+.panel-icon {
+    font-size: 26px !important;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+.preview-small {
+    height: 50px;
+    width: 50px;
+    background-color: lightgray;
+    text-align: center;
+    display: inline-block;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    cursor: pointer;
+}
+
+.thumbnails {
+    max-height:90px; 
+    overflow-y:scroll; 
+    border:2px solid #e8e8e8;
+    padding:2px 10px;
+}
+
+.small-img{
+    
+}
+
+.color-pen{
+    width:20px;
+    height:20px;
+    margin-left:10px;
+    display:inline-block;
+    cursor:pointer;
+}
