@@ -32,7 +32,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#services">Editare</a>
+                        <a class="nav-link js-scroll-trigger" href="#edit">Editare</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#about">Despre</a>
@@ -55,10 +55,11 @@
         </div>
     </header>
     <!-- Services -->
-    <section id="services">
-       <div class="editare">
-           @{Html.RenderPartial("~/Views/Home/Editare.cshtml");}
-       </div>
+    <section >
+        
+        <div class="editare" id="services">
+            @{Html.RenderPartial("~/Views/Home/Editare.cshtml");}
+        </div>
     </section>
     <!-- About -->
     <section id="about">
@@ -155,6 +156,9 @@
     <script src="~/Scripts/contact_me.js"></script>
     <!-- Custom scripts for this template -->
     <script src="~/Scripts/agency.min.js"></script>
+    <script src="@Url.Content("~/Scripts/pixastic.core.js")"></script>
+    <script src="@Url.Content("~/Scripts/pixastic.jquery.js")"></script>
+    <script src="@Url.Content("~/Scripts/histogram.js")"></script>
     <script src="@Url.Content("~/Scripts/edit.js")"></script>
 </body>
 </html>

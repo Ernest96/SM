@@ -11,6 +11,21 @@
     var mousePressed = false;
     var lastX, lastY;
     var ctx = null;
+    var colorhistogram = {};
+    var histogram = {};
+
+
+    function drawhist(canvasname) {
+        var ctx = $(canvasname)[0].getContext("2d");
+        ctx.fillStyle = "rgb(0,0,0);";
+
+        var max = Math.max.apply(null, histogram.values);
+
+        jQuery.each(histogram.values, function (i, x) {
+            var pct = (histogram.values[i] / max) * 100;
+            ctx.fillRect(i, 100, 1, -Math.round(pct));
+        });
+    }
 
     $("#add-photo").click(function () {
         if (showSlide)
@@ -60,21 +75,20 @@
                         canvasHeight /= diff;
                         canvasWidth /= diff;
                     }
-                    
+
                     canvas.style.height = canvasHeight + "px";
                     canvas.width = canvasWidth;
                     canvas.height = canvasHeight;
                     ctx.drawImage(this, 0, 0, canvasWidth, canvasHeight);
                 }
-                
+
             }
 
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    function hideCurrent()
-    {
+    function hideCurrent() {
         $('#c' + current).hide();
     }
 
@@ -99,7 +113,17 @@
             return;
         $('.window-edit').css('background-color', 'white');
         readURL(this);
-        $('html,body').scrollTop($("#services").offset().top + 60)
+    });
+
+    $("#histogram").click(function () {
+        var canvas = document.getElementById('histcanvas');
+        var context = canvas.getContext("2d");
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        $("#c" + current).pixastic("histogram",
+            { color: "rgb(255,0,0)", returnValue: histogram });
+        drawhist("#histcanvas");
     });
 
     $("#black-and-white").click(function () {
@@ -129,8 +153,7 @@
 
         var adjustment = Number($('#brightScale').val());
 
-        if (adjustment > 100 || adjustment < 0)
-        {
+        if (adjustment > 100) {
             $('#brightScale').val() = 0;
             return;
         }
@@ -154,7 +177,7 @@
 
         var contrast = Number($('#contrastScale').val());
 
-        if (contrast > 100 || contrast < 0) {
+        if (contrast > 100) {
             $('#contrastScale').val() = 0;
             return;
         }
@@ -254,8 +277,9 @@
         myImageData.src = canvas.toDataURL();
 
         myImageData.onload = function () {
-         
+
             context.save();
+            context.clearRect(0, 0, canvas.width, canvas.height);
             context.translate(canvas.width, 0);
             context.scale(-1, 1);
             context.drawImage(myImageData, 0, 0);
@@ -288,13 +312,13 @@
         myImageData.onload = function () {
 
             context.save();
-            var s = 1.05;
+            var s = 1.1;
             context.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.width = canvas.width * s;
+
             myImageData.width = canvas.width;
             myImageData.height = canvas.height;
 
-            context.scale(s, 1);
+            context.scale(s, s);
             context.drawImage(myImageData, 0, 0);
             context.restore();
 
@@ -317,13 +341,12 @@
         myImageData.onload = function () {
 
             context.save();
-            var s = 0.95;
+            var s = 0.9;
             context.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.width = canvas.width * s;
             myImageData.width = canvas.width;
             myImageData.height = canvas.height;
 
-            context.scale(s, 1);
+            context.scale(s, s);
             context.drawImage(myImageData, 0, 0);
             context.restore();
 
@@ -331,8 +354,6 @@
 
         }
     });
-
-
 
     $("#undo").click(function () {
 
@@ -362,18 +383,17 @@
 
     });
 
-  
+
     $('#slide-show').click(function () {
         var i = 1;
-        if (!showSlide)
-        {
+        if (!showSlide) {
             $('#slide-show').html('Stop Show  <i class="fa fa-picture-o" aria-hidden="true"></i>')
             showSlide = true;
             si = setInterval(function () {
                 if (i >= max) {
                     i = 1;
                 }
-                for (var j = 1; j <= max; j++){
+                for (var j = 1; j <= max; j++) {
                     $('#c' + j).hide();
                 }
                 $('#c' + i).show();
@@ -382,21 +402,21 @@
                 i++;
             }, 2000);
         }
-        else
-        {
+        else {
             showSlide = false;
             $('#slide-show').html('Start Show  <i class="fa fa-picture-o" aria-hidden="true"></i>')
             clearInterval(si);
-            $('#c' + i).hide();
+            for (var j = 1; j <= max; j++) {
+                $('#c' + j).hide();
+            }
             showCurrent();
         }
 
     });
 
-   
 
-    function initDraw() { 
-        
+
+    function initDraw() {
         ctx = document.getElementById('c' + current).getContext("2d");
 
         $('#c' + current).mousedown(function (e) {
