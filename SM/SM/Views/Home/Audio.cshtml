@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+}
+<link href="~/Content/main.css" rel="stylesheet">
+
+<div class="row" id="audio">
+    <div class="col-12">
+        <div align="center" style="margin-top:35px;">
+            <h1>Audio</h1>
+        </div>
+    </div>
+</div>
+
+<br /> <br />
+@using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data", id = "audio_form" }))
+{
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-3">
+            <label class="control-label">Audio nr.1</label>
+            <input id="audio-1" name="audio1" accept=".mp3" type="file" class="form-control">
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3">
+            <label class="control-label">Audio nr.2</label>
+            <input id="audio-2" name="audio2" accept=".mp3" type="file" class="form-control">
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3"> <button type="button" class="btn btn-primary" id="upload_audio" style="margin-top:40px">Upload</button></div>
+    </div>
+}
+
+<br />
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-3">
+        <div title="play" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="play1()"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+        <div title="pause" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="pause1()"><i class="fa fa-pause" aria-hidden="true"></i></div>
+        <div title="stop" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="stop1()"><i class="fa fa-stop" aria-hidden="true"></i></div>
+        <div title="pitch +" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="pitchUp()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+        <div title="pitch -" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="pitchDown()"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+        <div title="reverse" id="reverse" style="cursor:pointer; display:inline-block; margin-left:12px;"><i class="fa fa-exchange" aria-hidden="true"></i></div>
+        <div title="reverse" id="echo" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="echo()"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
+
+    </div>
+    <div class="col-1"></div>
+    <div class="col-3">
+        <div title="play" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="play2()"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+        <div title="pause" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="pause2()"><i class="fa fa-pause" aria-hidden="true"></i></div>
+        <div title="stop" style="cursor:pointer; display:inline-block; margin-left:12px;" onclick="stop2()"><i class="fa fa-stop" aria-hidden="true"></i></div>
+    </div>
+</div>
+
+
+<br />
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-4">
+        <audio style="width:420px; margin-left:-20px" id="sunet-1" controls>
+            <source src="" type="audio/mpeg" />
+        </audio>
+    </div>
+    <div class="col-5">
+        <audio id="sunet-2" style="width:420px; margin-left:-20px" controls>
+            <source src="" type="audio/mpeg" />
+        </audio>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        <label>Low Gain </label>
+        <input type="range" style="width:127px" value="100" step="1" min="0" max="100" oninput="changeGain(this.value, 'lowGain');"></input>
+        <div class="controls">
+            <label>Mid Gain </label>
+            <input type="range" value="100" step="1" min="0" max="100" oninput="changeGain(this.value, 'midGain');"></input>
+        </div>
+        <div class="controls">
+            <label>High Gain</label>
+            <input type="range" style="width:122px" value="100" step="1" min="0" max="100" oninput="changeGain(this.value, 'highGain');"></input>
+        </div>
+    </div>
+</div>
+
+
+
+<br />
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-9">
+        <div id="controls">
+            <div><a class="btn btn-primary play" onclick="this.innerText = playm();">Play metronom</a></div>
+            <div id="tempoBox">Frecventa: <span id="showTempo">120</span>BPM <input id="tempo" type="range" min="30.0" max="160.0" step="1" value="120" style="height: 20px; width: 200px" onInput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;"></div>
+            <div>Perioada:<select onchange="noteResolution = this.selectedIndex;"><option>1/16<option>1/8<option>1/4</select></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="btn btn-primary" onclick="playHistogram()" style="background-color:lawngreen; float:right !important">Start Vizualizare </div>
+    </div>
+    <div class="col-3">
+        <div class="btn btn-primary" onclick="stopHistogram()" style="background-color:lawngreen">Stop Vizualizare </div>
+    </div>
+</div>
+
+<br />
+<div class="row" style="margin-top:10px">
+    <div class="col-12">
+        <div align="center" id="grafic" style="background-color: #444444">
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/webaudio.js"></script>
+<script src="~/Scripts/AudioEdit.js"></script>

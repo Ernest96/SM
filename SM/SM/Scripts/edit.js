@@ -7,6 +7,10 @@
     var showSlide = false;
     var si;
     var color;
+    var vformat = "mp4";
+    var vprocessing = false;
+    var pprocessing = false;
+    var vincarc = false;
 
     var mousePressed = false;
     var lastX, lastY;
@@ -455,5 +459,255 @@
     $('.color-pen').click(function () {
         color = this.id;
     });
+
+    ////////////////////////////////////////////////
+    $('#upload_audio').click(function () {
+        var data_form = new FormData($('#audio_form')[0]);
+        $.ajax({
+            url: "/Edit/UploadAudio",
+            data: data_form,
+            type: 'post',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                document.getElementById("sunet-1").setAttribute("src", "http://sm.com/content/" + data.name1);
+                document.getElementById("sunet-2").setAttribute("src", "http://sm.com/content/" + data.name2);
+                alert("Fisiere incarcate cu succes!");
+            }
+        });
+    });
+
+    $('#reverse').click(function () {
+        var content = document.getElementById("sunet-1").getAttribute("src");
+        content = content.split("/");
+        content = content[content.length - 1];
+        console.dir(content);
+
+        alert("Fisierul se proceseaza");
+
+        $.ajax({
+            url: "/Edit/Reverse",
+            data: { 'name': content },
+            type: 'post',
+            cache: false,
+            success: function (data) {
+                document.getElementById("sunet-1").setAttribute("src", "http://sm.com/content/" + data.name1);
+                alert("Fisierul a fost inversat");
+            }
+        });
+    });
+
+    //////////////////////////////
+    $('#upload_video').click(function () {
+
+        if (vprocessing == true)
+            return;
+
+        vprocessing = true;
+        $('#video_link').hide();
+        var data_form = new FormData($('#video_form')[0]);
+        var format = vformat;
+        data_form.append('toFormat', format);
+        $(this).html('<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>')
+        $.ajax({
+            url: "/Edit/VideoConvert",
+            data: data_form,
+            type: 'post',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                vprocessing = false;
+                $('#upload_video').html('Convert');
+                if (data.succes == true) {
+                    $('#video_link').attr('href', data.link);
+                    $('#video_link').show();
+                }
+            },
+            error: function (data) {
+                vprocessing = false;
+                $('#upload_video').html('Convert');
+            }
+        });
+    });
+
+    $('#incarca_video').click(function () {
+
+        if (vincarc == true)
+            return;
+
+        vincarc = true;
+        var data_form = new FormData($('#video_incarca_form')[0]);
+        $(this).html('<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>')
+        $.ajax({
+            url: "/Edit/UploadVideo",
+            data: data_form,
+            type: 'post',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                vincarc = false;
+                $('#incarca_video').html('Upload');
+                if (data.succes == true) {
+                    document.getElementById('video-ascuns').setAttribute("src", data.file);
+                    document.getElementById('video-ascuns').load();
+                    document.getElementById('video-ascuns').play();
+                }
+            },
+            error: function (data) {
+                vincarc = false;
+                $('#incarca_video').html('Upload');
+            }
+        });
+    });
+
+    $('select').change(function () {
+        vformat = $(this).children('option:selected').val();
+    });
+
+    $('#upload_powerpoint').click(function () {
+
+        if (pprocessing == true)
+            return;
+
+        pprocessing = true;
+        $('#video2_link').hide();
+        var data_form = new FormData($('#powerpoint_form')[0]);
+        $(this).html('<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>')
+        $.ajax({
+            url: "/Edit/Transform",
+            data: data_form,
+            type: 'post',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                pprocessing = false;
+                $('#upload_powerpoint').html('Convert');
+                if (data.succes == true) {
+                    $('#video2_link').attr('href', data.link);
+                    $('#video2_link').show();
+                }
+            },
+            error: function (data) {
+                pprocessing = false;
+                $('#upload_powerpoint').html('Convert');
+            }
+        });
+    });
+
+    function grayscale(pixels) {
+        //see http://www.html5rocks.com/en/tutorials/canvas/imagefilters/ for a full introduction to filters and canvas
+        var d = pixels.data;
+        for (var i = 0; i < d.length; i += 4) {
+            var r = d[i];
+            var g = d[i + 1];
+            var b = d[i + 2];
+            // CIE luminance for the RGB
+            // The human eye is bad at seeing red and blue, so we de-emphasize them.
+            var v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            d[i] = d[i + 1] = d[i + 2] = v
+        }
+        return pixels;
+    }
+
+
+    function changeBright(pixels) {
+        d = pixels.data;
+        for (var i = 0; i < d.length; i += 4) {
+            d[i] += vbright;
+            d[i + 1] += vbright;
+            d[i + 2] += vbright;
+        }
+        return pixels;
+    }
+
+    var vbright = 0;
+    var grayed = false;
+    var invert = false;
+    var c_mode = 'source-over';
+    var c_opac = 1;
+    var v = document.getElementById('video-ascuns');
+    var vcanvas = document.getElementById('vidcanvas');
+    var vcontext = vcanvas.getContext('2d');
+    function draw() {
+        if (v.paused || v.ended) return false;
+        vcontext.clearRect(0, 0, 720, 480);
+        vcontext.globalCompositeOperation = c_mode;
+        vcontext.globalAlpha = c_opac;
+        vcontext.drawImage(v, 0, 0, 720, 480);
+        if (grayed) {
+            vcontext.putImageData(grayscale(vcontext.getImageData(0, 0, 720, 480)), 0, 0);
+        }
+        if (invert) {
+            vcontext.globalCompositeOperation = 'difference';
+            vcontext.fillStyle = 'white';
+            vcontext.fillRect(0, 0, 720, 480);
+        }
+
+        vcontext.putImageData(changeBright(vcontext.getImageData(0, 0, 720, 480)), 0, 0);
+        requestAnimFrame(draw);
+        return true;
+    }
+    v.addEventListener('play', function () {
+        draw();
+    }, false);
+    
+    $('select').bind('change', function (event) {
+        c_mode = event.target.value;
+    })
+    
+
+    $('#test').click(function () {
+        v.play();
+    });
+
+    $('#vpause').click(function () {
+        v.pause();
+    })
+
+    $('#vstop').click(function () {
+        v.currentTime = 0;
+    })
+
+    $('#vplay').click(function () {
+        v.playbackRate = 1.0;
+        v.play();
+    })
+
+    $('#speed_minus').click(function () {
+        v.playbackRate = v.playbackRate * 0.5
+    })
+
+    $('#speed_plus').click(function () {
+        v.playbackRate = v.playbackRate * 2.0
+    })
+
+    $('#vblackwhite').click(function () {
+        if (grayed == true)
+            grayed = false;
+        else
+            grayed = true;
+
+    })
+
+    $('#vinvert').click(function () {
+        if (invert == true)
+            invert = false;
+        else
+            invert = true;
+
+    })
+
+    $('#bright_plus').click(function () {
+        vbright = vbright + 10;
+    });
+
+    $('#bright_minus').click(function () {
+        vbright = vbright - 10;
+    });
+
 
 });

@@ -32,7 +32,13 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#edit">Editare</a>
+                        <a class="nav-link js-scroll-trigger" href="#edit">Imagini</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#audio">Audio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#video">Video</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#about">Despre</a>
@@ -55,10 +61,26 @@
         </div>
     </header>
     <!-- Services -->
-    <section >
-        
+    <section>
         <div class="editare" id="services">
-            @{Html.RenderPartial("~/Views/Home/Editare.cshtml");}
+            <header class="masthead" style="background-image:url(/img/imagini.jpg); color:black; text-align:left;">
+                @{Html.RenderPartial("~/Views/Home/Editare.cshtml");}
+            </header>
+        </div>
+    </section>
+    <section>
+        <div class="music-edit" id="mus">
+            <header class="masthead" style="background-image:url(/img/audio.jpg); text-align:left;">
+                @{Html.RenderPartial("~/Views/Home/Audio.cshtml");}
+            </header>
+        </div>
+    </section>
+    <section>
+        <div class="video-edit" id="vid">
+            <header class="masthead" style="background-image:url(/img/video.jpg); text-align:left;">
+                @{Html.RenderPartial("~/Views/Home/Video.cshtml");}
+                <br />
+            </header>
         </div>
     </section>
     <!-- About -->
@@ -75,15 +97,19 @@
                     <ul class="timeline">
                         <li>
                             <div class="timeline-image">
-                                <img class="rounded-circle img-fluid" src="img/about/1.jpg" alt="">
+                                <img class="rounded-circle img-fluid" src="~/img/about/3.jpg" alt="">
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h4>2009-2011</h4>
+                                    <h4>2018</h4>
                                     <h4 class="subheading"></h4>
                                 </div>
                                 <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                                    <p class="text-muted">
+                                        Acest site va permite sa editati foarte usor si rapid imagini audio, video si fisiere audio.
+                                        Proiectul dat a fost dezvoltat in cadrul lucrarilor de laborator la obiectul Sisteme Multimedia din
+                                        cadrul UTM FCIM.
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -104,21 +130,18 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="img/Ernest.jpg" alt="">
                         <h4>Bitca Ernest</h4>
                         <p class="text-muted">Student TI-152</p>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="img/Misa.jpg" alt="">
                         <h4>Mihai Lascu</h4>
                         <p class="text-muted">Student TI-152</p>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="~/img/SavaNina.jpg" alt="">
                         <h4>Sava Nina</h4>
                         <p class="text-muted">Lector Superior FCIM</p>
                     </div>
@@ -160,5 +183,7 @@
     <script src="@Url.Content("~/Scripts/pixastic.jquery.js")"></script>
     <script src="@Url.Content("~/Scripts/histogram.js")"></script>
     <script src="@Url.Content("~/Scripts/edit.js")"></script>
+    <script src="http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+    <script src="@Url.Content("~/Scripts/metronome.js")"></script>
 </body>
 </html>

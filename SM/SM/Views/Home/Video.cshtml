@@ -1,0 +1,111 @@
+﻿@{
+    /**/
+
+    Layout = null;
+}
+
+<div class="row" id="video">
+    <div class="col-12">
+        <div align="center" style="margin-top:35px;">
+            <h1>Video</h1>
+        </div>
+    </div>
+</div>
+<br />
+@using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data", id = "video_form" }))
+{
+    <div class="row">
+
+        <div class="col-1"></div>
+        <div class="col-2">
+            <label class="control-label">Video</label>
+            <input id="audio-2" name="video" accept="video/*" type="file" class="form-control">
+        </div>
+        <div class="col-1">
+            <div style="position:absolute; left:0px; bottom:0px; float:right !important">
+                <select name="format">
+                    <option value="mp4">mp4</option>
+                    <option value="avi">avi</option>
+                    <option value="mov">mov</option>
+                    <option value="mkv">mkv</option>
+                    <option value="wmv">wmv</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <button id="upload_video" type="button" style="width:100px;position:absolute; left:0px; bottom:0px;" class="btn btn-primary">Convert</button>
+        </div>
+        <div class="col-4" id="link_div">
+            <a style="display:none;color:#007bff !important; bottom:0px; position:absolute;" id="video_link" href="#">Salveaza video</a>
+        </div>
+    </div>
+
+}
+<br />
+@using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data", id = "powerpoint_form" }))
+{
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-3">
+            <label class="control-label">Powerpoint to WMV</label>
+            <input id="audio-2" name="pptx" accept="application/pdf,
+      application/vnd.ms-powerpoint,
+      application/vnd.openxmlformats-officedocument.presentationml.slideshow,
+      application/vnd.openxmlformats-officedocument.presentationml.presentation,
+      .pps" type="file" class="form-control">
+        </div>
+        <div class="col-1">
+            <button id="upload_powerpoint" type="button" style="width:100px;position:absolute; left:0px; bottom:0px;" class="btn btn-primary">Convert</button>
+        </div>
+        <div class="col-4" id="link2_div">
+            <a style="display:none;color:#007bff !important; bottom:0px; position:absolute;" id="video2_link" href="#">Salveaza prezentarea video</a>
+        </div>
+    </div>
+
+}
+<br />
+<br />
+<div class="row">
+    <div class="col-12">
+        <div align="center">
+            <canvas width="720" height="480" id="vidcanvas" style="border:solid"></canvas>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-12">
+        <div align="center">
+            <div title="play" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="vplay"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+            <div title="pause" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="vpause"><i class="fa fa-pause" aria-hidden="true"></i></div>
+            <div title="stop" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="vstop"><i class="fa fa-stop" aria-hidden="true"></i></div>
+            <div title="less minus" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="speed_minus"><i class="fa fa-backward" aria-hidden="true"></i></div>
+            <div title="more speed" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="speed_plus"><i class="fa fa-forward" aria-hidden="true"></i></div>
+            <div title="black-white" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="vblackwhite"><i class="fa fa-eye-slash" aria-hidden="true"></i></div>
+            <div title="invert" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="vinvert"><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
+            <div title="bright plus" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="bright_plus"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+            <div title="bright minus" style="font-size:22px; cursor:pointer; display:inline-block; margin-left:12px;" id="bright_minus"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+
+        </div>
+    </div>
+</div>
+<video id="video-ascuns" controls style="display:none" src="http://sm.com/content/video.mp4" width="720" height="480"></video>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data", id = "video_incarca_form" }))
+{
+<div class="row">
+
+    <div class="col-1"></div>
+    <div class="col-2">
+        <label class="control-label">Editare video</label>
+        <input  name="video" accept="video/mp4" type="file" class="form-control">
+    </div>
+    <div class="col-1">
+        <button id="incarca_video" type="button" style="width:100px;position:absolute; left:0px; bottom:0px;" class="btn btn-primary">UPLOAD</button>
+    </div>
+</div>
+}
+
+
+
+<script src="~/Scripts/video.js"></script>
